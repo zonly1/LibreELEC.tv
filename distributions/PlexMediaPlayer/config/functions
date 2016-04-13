@@ -29,8 +29,10 @@ debug_strip() {
 }
 
 deploy_symbols() {
-  echo "Deploying symbols for $PKG_NAME..."
-  PLEX_DUMP_DIR=$PKG_DIR/.symbols
-  mkdir -p  $ROOT/target/$1
-  cp  $PLEX_DUMP_DIR/* $ROOT/target/$1
+  if [ "$PLEX_DUMP_SYMBOLS" = "yes" ]; then
+    echo "Deploying symbols for $PKG_NAME..."
+    PLEX_DUMP_DIR=$PKG_DIR/.symbols
+    mkdir -p  $ROOT/target/$1
+    cp  $PLEX_DUMP_DIR/* $ROOT/target/$1
+  fi
 }
