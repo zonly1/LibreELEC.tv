@@ -219,9 +219,7 @@
 			-skip qtxmlpatterns -skip qttranslations -skip qtmultimedia \
 			-skip qtquickcontrols2 -skip qt3d" 
 
-if [ "$PLEX_DEBUG" = yes ]; then
- QT_EXTRA_FLAGS=--force-debug-info
-fi
+  QT_EXTRA_FLAGS=--force-debug-info
 
 # We want ssh enabled by default 
 EXTLINUX_PARAMETERS="ssh"
