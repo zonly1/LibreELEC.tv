@@ -34,19 +34,11 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
 # configure GPU drivers and dependencies:
-  get_graphicdrivers
-
-### PLEX
-if [ "$CI_BUILD" = true ]; then
- PLEX_DUMP_SYMBOLS=yes
-fi
+get_graphicdrivers
 
 unpack() {
-
-        git clone --depth 1 -b $PKG_VERSION git@github.com:wm4/FFmpeg.git $BUILD/${PKG_NAME}-${PKG_VERSION}
-
+  git clone --depth 1 -b $PKG_VERSION git@github.com:wm4/FFmpeg.git $BUILD/${PKG_NAME}-${PKG_VERSION}
 }
-### END PLEX
 
 if [ "$VAAPI_SUPPORT" = yes ]; then
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET libva-intel-driver"
@@ -69,10 +61,8 @@ else
   FFMPEG_LIBDCADEC="--disable-libdcadec"
 fi
 
-### PLEX
 # We always want debugging on ffmpeg
-  FFMPEG_DEBUG="--enable-debug --disable-stripping"
-## END PLEX
+FFMPEG_DEBUG="--enable-debug --disable-stripping"
 
 case "$TARGET_ARCH" in
   arm)
@@ -99,16 +89,12 @@ case "$TARGET_FPU" in
   ;;
 esac
 
-### PLEX
 case $PROJECT in
-      Generic|Nvidia_Legacy)
-      ;;
-      RPi|RPi2)
-      FFMPEG_MMAL="--enable-mmal"
-      PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET bcm2835-driver"
-      ;;
+  RPi|RPi2)
+    FFMPEG_MMAL="--enable-mmal"
+    PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET bcm2835-driver"
+  ;;
 esac
-### END PLEX
 
 pre_configure_target() {
   cd $ROOT/$PKG_BUILD
