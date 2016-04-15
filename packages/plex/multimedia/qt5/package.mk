@@ -24,18 +24,6 @@ PKG_LICENSE="OSS"
 PKG_SITE="https://nightlies.plex.tv"
 PKG_URL="$PKG_SITE/directdl/plex-oe-sources/qt-everywhere-opensource-src-$PKG_VERSION.tar.gz"
 PKG_SOURCE_DIR="qt-everywhere-opensource-src-${PKG_VERSION}"
-
-case $PROJECT in
-  Generic|Nvidia_Legacy)
-    PKG_DEPENDS_TARGET="curl bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc alsa flex bison ruby libXcursor libXtst pciutils  nss libxkbcommon libdrm libXi atk libXScrnSaver"
-    PKG_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig libressl linux-headers glibc alsa libXcursor libXtst pciutils pulseaudio nss libxkbcommon"
-  ;;
-  RPi|RPi2)
-    PKG_DEPENDS_TARGET="curl bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc alsa flex bison ruby libwebp libevdev libdrm atk"
-    PKG_BUILD_DEPENDS_TARGET="bcm2835-driver bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig libressl linux-headers glibc alsa"
-  ;;
-esac
-
 PKG_PRIORITY="optional"
 PKG_SECTION="lib"
 PKG_SHORTDESC="Qt GUI toolkit"
@@ -44,8 +32,34 @@ PKG_LONGDESC="Qt GUI toolkit"
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
+PKG_BASE_DEPENDS_TARGET="curl bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc alsa flex bison ruby libdrm atk"
+PKG_BASE_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig libressl linux-headers glibc alsa libxkbcommon"
+
+# determine QPA related packages
+if [ "$DISPLAYSERVER" = "x11" ]; then
+  PKG_QT_QPA="libXcursor libXtst nss libxkbcommon pciutils libXi libXScrnSaver"
+elif [ ! "$OPENGLES" = "no" ]; then
+  PKG_QT_QPA="$OPENGLES libevdev libwebp"
+fi
+
+# Add Audio package
+case $PROJECT in
+  Generic|Nvidia_Legacy)
+    PKG_QT_AUDIO="pulseaudio"
+  ;;
+  RPi|RPi2)
+    PKG_QT_AUDIO="alsa"
+  ;;
+esac
+
+# Combine packages
+PKG_DEPENDS_TARGET="$PKG_BASE_DEPENDS_TARGET $PKG_QT_AUDIO $PKG_QT_QPA"
+PKG_BASE_BUILD_DEPENDS_TARGET="$PKG_DEPENDS_TARGET"
+
+# Configure the device option
 QT_MKSPECS_DEVICE="linux-${PROJECT}-g++"
 
+# Define Qt build base options
 QT_BASE_OPTS="	-sysroot ${SYSROOT_PREFIX} \
 		-prefix /usr/local/qt5 \
 		-hostprefix ${ROOT}/${BUILD} \
