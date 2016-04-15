@@ -36,6 +36,10 @@ PKG_AUTORECONF="no"
 # configure GPU drivers and dependencies:
 get_graphicdrivers
 
+# generate debug symbols for this package
+# if we want to
+DEBUG=$PLEX_DEBUG
+
 unpack() {
   git clone --depth 1 -b $PKG_VERSION git@github.com:wm4/FFmpeg.git $BUILD/${PKG_NAME}-${PKG_VERSION}
 }

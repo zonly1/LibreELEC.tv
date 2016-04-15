@@ -20,19 +20,6 @@ debug_strip() {
       ;;
     esac
   fi
-
-  # eventually strip, if we didn't ask for debug
-  case $PKG_NAME in
-    plexmediaplayer|mpv|ffmpeg-plex)
-      if [ ! "$PLEX_DEBUG" = "yes" ]; then
-        $TARGET_STRIP `find $* -type f -executable 2>/dev/null` 2>/dev/null || :
-      fi 
-    ;;
-   
-    *)
-      $TARGET_STRIP `find $* -type f -executable 2>/dev/null` 2>/dev/null || :
-    ;;
-  esac
 }
 
 deploy_symbols() {

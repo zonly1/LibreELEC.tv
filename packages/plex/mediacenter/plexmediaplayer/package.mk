@@ -66,6 +66,9 @@ if [ "$DISPLAYSERVER" = "x11" ]; then
   PKG_DEPENDS_TARGET+=" libX11 xrandr"
 fi
 
+# generate debug symbols for this package
+# if we want to
+DEBUG=$PLEX_DEBUG
 
 unpack() {
   if [ -d $BUILD/${PKG_NAME}-${PKG_VERSION} ]; then

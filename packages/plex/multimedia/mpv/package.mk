@@ -36,6 +36,10 @@ PKG_CONFIGURE_OPTS_TARGET="--enable-libmpv-shared --disable-libsmbclient --disab
 
 MPV_EXTRA_CFLAGS="-I$PWD/$BUILD/${PKG_NAME}-${PKG_VERSION}/extraheaders"
 
+# generate debug symbols for this package
+# if we want to
+DEBUG=$PLEX_DEBUG
+
 unpack() {
   mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}
   git clone --depth 1 -b $PKG_VERSION git@github.com:wm4/mpv.git $BUILD/${PKG_NAME}-${PKG_VERSION}/.
