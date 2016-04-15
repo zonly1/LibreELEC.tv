@@ -134,6 +134,10 @@ makeinstall_target() {
   cp -Rf ${SYSROOT_PREFIX}/usr/local/qt5/* ${INSTALL}/usr/local/qt5/
 
   #cleanup the plugins
+  rm -rf  ${INSTALL}/usr/local/qt5/doc
+  rm -rf  ${INSTALL}/usr/local/qt5/bin
+  rm -rf  ${INSTALL}/usr/local/qt5/include
+
   case $PROJECT in
     Generic|Nvidia_Legacy)
     ;;
