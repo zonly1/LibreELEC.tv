@@ -25,12 +25,12 @@ debug_strip() {
   case $PKG_NAME in
     plexmediaplayer|mpv|ffmpeg-plex)
       if [ ! "$PLEX_DEBUG" = "yes" ]; then
-        $STRIP `find $* -type f -executable 2>/dev/null` 2>/dev/null || :
+        $TARGET_STRIP `find $* -type f -executable 2>/dev/null` 2>/dev/null || :
       fi 
     ;;
    
     *)
-      $STRIP `find $* -type f -executable 2>/dev/null` 2>/dev/null || :
+      $TARGET_STRIP `find $* -type f -executable 2>/dev/null` 2>/dev/null || :
     ;;
   esac
 }
