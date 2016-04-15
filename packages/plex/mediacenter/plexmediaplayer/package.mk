@@ -38,7 +38,7 @@ PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="https://nightlies.plex.tv"
 PKG_URL="$PKG_SITE/directdl/plex-oe-sources/$PKG_NAME-dummy.tar.gz"
-PKG_DEPENDS_TARGET="toolchain systemd fontconfig qt5 libX11 xrandr libcec mpv SDL2 libXdmcp breakpad breakpad:host libconnman-qt strace ${MEDIACENTER,,}-fonts-ttf  fc-cache"
+PKG_DEPENDS_TARGET="toolchain systemd fontconfig qt5 libcec mpv SDL2 libXdmcp breakpad breakpad:host libconnman-qt ${MEDIACENTER,,}-fonts-ttf  fc-cache"
 PKG_DEPENDS_HOST="toolchain"
 PKG_PRIORITY="optional"
 PKG_SECTION="mediacenter"
@@ -61,6 +61,12 @@ if [ ! -z "$CI_CRASHDUMP_SECRET" ]; then
   CRASHDUMP_SECRET="-DCRASHDUMP_SECRET=${CI_CRASHDUMP_SECRET}"
 fi
 
+# Add eventual X11 additionnal deps
+if [ "$DISPLAYSERVER" = "x11" ]; then
+  PKG_DEPENDS_TARGET+=" libX11 xrandr"
+fi
+
+
 unpack() {
   if [ -d $BUILD/${PKG_NAME}-${PKG_VERSION} ]; then
     cd $BUILD/${PKG_NAME}-${PKG_VERSION} ; rm -rf build
@@ -79,18 +85,6 @@ unpack() {
     fi
   fi
 
-  if [ "$PLEX_DEBUG" = yes ]; then
-    cd $BUILD/${PKG_NAME}-${PKG_VERSION}
-
-    #This is used when using QtCreator from the build tree to deploy to /storage root
-    cp $PKG_DIR/QtCreatorDeployment.txt $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/
-
-    #This allows cross compiler to find the libs that are used by other libs for QT5 
-    cp $PKG_DIR/ld.so.conf $SYSROOT_PREFIX/etc/
-
-    cd $ROOT
-  fi
-
   cd ${ROOT}	
 }
 
@@ -101,51 +95,36 @@ configure_target() {
   [ ! -d build ] && mkdir build
   cd build
 
-if [ "$PLEX_DEBUG" = yes ]; then
-  BUILD_TYPE="debug" 
-else
-  BUILD_TYPE="RelWithDebInfo"
-fi
+  if [ "$PLEX_DEBUG" = yes ]; then
+    BUILD_TYPE="debug" 
+  else
+    BUILD_TYPE="RelWithDebInfo"
+  fi
 
-# Configure the build
-case $PROJECT in
-  Generic|Nvidia_Legacy)
-    cmake \
-    -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-    -DCMAKE_LIBRARY_PATH="${SYSROOT_PREFIX}/usr/lib" \
-    -DCMAKE_PREFIX_PATH="${SYSROOT_PREFIX};${SYSROOT_PREFIX}/usr/local/qt5" \
-    -DCMAKE_INCLUDE_PATH="${SYSROOT_PREFIX}/usr/include" \
-    -DQTROOT=${SYSROOT_PREFIX}/usr/local/qt5 \
-    -DCMAKE_FIND_ROOT_PATH="${SYSROOT_PREFIX}/usr/local/qt5" \
-    -DUSE_QTQUICK=on \
-    -DENABLE_MPV=on \
-    -DCMAKE_VERBOSE_MAKEFILE=on \
-    -DOPENELEC=on \
-    -DENABLE_DUMP_SYMBOLS=on \
-    $CRASHDUMP_SECRET \
-    $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
-  ;;
 
-  RPi|RPi2)
-    cmake \
-    -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-    -DCMAKE_LIBRARY_PATH="${SYSROOT_PREFIX}/usr/lib" \
-    -DCMAKE_PREFIX_PATH="${SYSROOT_PREFIX};${SYSROOT_PREFIX}/usr/local/qt5" \
-    -DCMAKE_INCLUDE_PATH="${SYSROOT_PREFIX}/usr/include" \
-    -DQTROOT=${SYSROOT_PREFIX}/usr/local/qt5 \
-    -DCMAKE_FIND_ROOT_PATH="${SYSROOT_PREFIX}/usr/local/qt5" \
-    -DUSE_QTQUICK=on \
-    -DENABLE_MPV=on \
-    -DBUILD_TARGET="RPI" \
-    -DCMAKE_VERBOSE_MAKEFILE=on \
-    -DOPENELEC=on \
-    -DENABLE_DUMP_SYMBOLS=on \
-    $CRASHDUMP_SECRET \
-    $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/.
-  ;;
-esac
+CMAKE_OPTIONS="-DCMAKE_INSTALL_PREFIX=/usr \
+               -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+               -DCMAKE_LIBRARY_PATH=$SYSROOT_PREFIX/usr/lib \
+               -DCMAKE_PREFIX_PATH=${SYSROOT_PREFIX};${SYSROOT_PREFIX}/usr/local/qt5 \
+               -DCMAKE_INCLUDE_PATH=${SYSROOT_PREFIX}/usr/include \
+               -DQTROOT=${SYSROOT_PREFIX}/usr/local/qt5 \
+               -DCMAKE_FIND_ROOT_PATH=${SYSROOT_PREFIX}/usr/local/qt5 \
+               -DCMAKE_VERBOSE_MAKEFILE=on \
+               -DOPENELEC=on \
+               $CRASHDUMP_SECRET"
+
+  # Configure the build
+  case $PROJECT in
+    Generic|Nvidia_Legacy)
+    ;;
+
+    RPi|RPi2)
+      CMAKE_OPTIONS+=" -DBUILD_TARGET=RPI"
+    ;;
+  esac
+
+  CMAKE_OPTIONS+=" $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/."
+  cmake $CMAKE_OPTIONS
 }
 
 makeinstall_target() {
