@@ -166,6 +166,8 @@ makeinstall_target() {
     ;;
   esac
 
+  #restore strip value
+  STRIP=$TARGET_STRIP
   debug_strip ${INSTALL}/usr/local/qt5/
 }
 
