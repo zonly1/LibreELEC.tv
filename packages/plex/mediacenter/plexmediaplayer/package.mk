@@ -104,6 +104,14 @@ configure_target() {
     BUILD_TYPE="RelWithDebInfo"
   fi
 
+  # Build the cmake toolchain file and .gdbinit
+  mkdir -p $ROOT/$PKG_BUILD/
+  cp  $PKG_DIR/toolchain.cmake $ROOT/$PKG_BUILD/
+  sed -e "s%@SYSROOT_PREFIX@%$SYSROOT_PREFIX%g" \
+      -e "s%@TARGET_PREFIX@%$TARGET_PREFIX%g" \
+      -e "s%@PKG_BUILD_DIR@%$ROOT/$PKG_BUILD%g" \
+      -i $ROOT/$PKG_BUILD/toolchain.cmake
+  echo "set sysroot ${ROOT}/${BUILD}/image/system" > $ROOT/$PKG_BUILD/.gdbinit
 
 CMAKE_OPTIONS="-DCMAKE_INSTALL_PREFIX=/usr \
                -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
