@@ -94,6 +94,16 @@ unpack() {
 configure_target() {
   cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
 
+  # Configure the build
+  case $PROJECT in
+    Generic|Nvidia_Legacy)
+    ;;
+
+    RPi|RPi2)
+      PMP_BUILD_TARGET="RPI"
+    ;;
+  esac
+
   # Create seperate config build dir to not work in the github tree
   [ ! -d build ] && mkdir build
   cd build
@@ -110,7 +120,14 @@ configure_target() {
   sed -e "s%@SYSROOT_PREFIX@%$SYSROOT_PREFIX%g" \
       -e "s%@TARGET_PREFIX@%$TARGET_PREFIX%g" \
       -e "s%@PKG_BUILD_DIR@%$ROOT/$PKG_BUILD%g" \
+      -e "s%@TARGET_CFLAGS@%$TARGET_CFLAGS%g" \
+      -e "s%@TARGET_CXXFLAGS@%$TARGET_CXXFLAGS%g" \
+      -e "s%@TARGET_LDFLAGS@%$TARGET_LDFLAGS%g" \
+      -e "s%@MAKEFLAGS@%$MAKEFLAGS%g" \
+      -e "s%@BUILD_TARGET@%$PMP_BUILD_TARGET%g" \
       -i $ROOT/$PKG_BUILD/toolchain.cmake
+
+
   echo "set sysroot ${ROOT}/${BUILD}/image/system" > $ROOT/$PKG_BUILD/.gdbinit
 
 CMAKE_OPTIONS="-DCMAKE_INSTALL_PREFIX=/usr \
@@ -122,6 +139,7 @@ CMAKE_OPTIONS="-DCMAKE_INSTALL_PREFIX=/usr \
                -DCMAKE_FIND_ROOT_PATH=${SYSROOT_PREFIX}/usr/local/qt5 \
                -DCMAKE_VERBOSE_MAKEFILE=on \
                -DOPENELEC=on \
+               -DBUILD_TARGET=${PMP_BUILD_TARGET} \
                $CRASHDUMP_SECRET"
 
   # Configure the build
@@ -131,6 +149,7 @@ CMAKE_OPTIONS="-DCMAKE_INSTALL_PREFIX=/usr \
 
     RPi|RPi2)
       CMAKE_OPTIONS+=" -DBUILD_TARGET=RPI"
+      echo "set(BUILD_TARGET \"RPI\")" >> $ROOT/$PKG_BUILD/toolchain.cmake
     ;;
   esac
 
