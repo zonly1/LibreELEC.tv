@@ -114,6 +114,22 @@ configure_target() {
     BUILD_TYPE="RelWithDebInfo"
   fi
 
+CMAKE_OPTIONS="-DCMAKE_INSTALL_PREFIX=/usr \
+               -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+               -DCMAKE_LIBRARY_PATH=$SYSROOT_PREFIX/usr/lib \
+               -DCMAKE_PREFIX_PATH=${SYSROOT_PREFIX};${SYSROOT_PREFIX}/usr/local/qt5 \
+               -DCMAKE_INCLUDE_PATH=${SYSROOT_PREFIX}/usr/include \
+               -DQTROOT=${SYSROOT_PREFIX}/usr/local/qt5 \
+               -DCMAKE_FIND_ROOT_PATH=${SYSROOT_PREFIX}/usr/local/qt5 \
+               -DCMAKE_VERBOSE_MAKEFILE=on \
+               -DOPENELEC=on \
+               -DBUILD_TARGET=${PMP_BUILD_TARGET} \
+               $CRASHDUMP_SECRET"
+
+  CMAKE_OPTIONS+=" $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/."
+  cmake $CMAKE_OPTIONS
+
+
   # Build the cmake toolchain file and .gdbinit
   mkdir -p $ROOT/$PKG_BUILD/
   cp  $PKG_DIR/toolchain.cmake $ROOT/$PKG_BUILD/
@@ -127,21 +143,6 @@ configure_target() {
       -e "s%@BUILD_TARGET@%$PMP_BUILD_TARGET%g" \
       -i $ROOT/$PKG_BUILD/toolchain.cmake
 
-
-  echo "set sysroot ${ROOT}/${BUILD}/image/system" > $ROOT/$PKG_BUILD/.gdbinit
-
-CMAKE_OPTIONS="-DCMAKE_INSTALL_PREFIX=/usr \
-               -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-               -DCMAKE_LIBRARY_PATH=$SYSROOT_PREFIX/usr/lib \
-               -DCMAKE_PREFIX_PATH=${SYSROOT_PREFIX};${SYSROOT_PREFIX}/usr/local/qt5 \
-               -DCMAKE_INCLUDE_PATH=${SYSROOT_PREFIX}/usr/include \
-               -DQTROOT=${SYSROOT_PREFIX}/usr/local/qt5 \
-               -DCMAKE_FIND_ROOT_PATH=${SYSROOT_PREFIX}/usr/local/qt5 \
-               -DCMAKE_VERBOSE_MAKEFILE=on \
-               -DOPENELEC=on \
-               -DBUILD_TARGET=${PMP_BUILD_TARGET} \
-               $CRASHDUMP_SECRET"
-
   # Configure the build
   case $PROJECT in
     Generic|Nvidia_Legacy)
@@ -153,8 +154,8 @@ CMAKE_OPTIONS="-DCMAKE_INSTALL_PREFIX=/usr \
     ;;
   esac
 
-  CMAKE_OPTIONS+=" $ROOT/$BUILD/$PKG_NAME-$PKG_VERSION/."
-  cmake $CMAKE_OPTIONS
+  echo "set sysroot ${ROOT}/${BUILD}/image/system" > $ROOT/$PKG_BUILD/.gdbinit
+
 }
 
 makeinstall_target() {
