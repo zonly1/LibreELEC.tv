@@ -15,7 +15,7 @@
   ROOT_PASSWORD="plex"
 
 # Mediacenter to use (kodi / Plex Client / no)
-  MEDIACENTER="plexmediaplayer"
+  MEDIACENTER="PlexMediaPlayer"
 
 # Install glibc locales to the build (yes / no)
   GLIBC_LOCALES="yes"
