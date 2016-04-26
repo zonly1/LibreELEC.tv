@@ -71,7 +71,7 @@ QT_BASE_OPTS="	-sysroot ${SYSROOT_PREFIX} \
 		-make libs \
 		-no-pch \
 		-no-icu \
-		-system-xkbcommon \
+		-qt-xkbcommon \
 		-no-sql-sqlite2 \
 		-nomake examples \
 		-nomake tests \
