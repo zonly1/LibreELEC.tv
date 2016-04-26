@@ -33,7 +33,7 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
 PKG_BASE_DEPENDS_TARGET="curl bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig glibc alsa flex bison ruby libdrm atk"
-PKG_BASE_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig libressl linux-headers glibc alsa libxkbcommon"
+PKG_BASE_BUILD_DEPENDS_TARGET="bzip2 Python zlib:host zlib libpng tiff dbus glib fontconfig libressl linux-headers glibc alsa libxkbcommon pulseaudio"
 
 # determine QPA related packages
 if [ "$DISPLAYSERVER" = "x11" ]; then
@@ -41,16 +41,6 @@ if [ "$DISPLAYSERVER" = "x11" ]; then
 elif [ ! "$OPENGLES" = "no" ]; then
   PKG_QT_QPA="$OPENGLES libevdev libwebp"
 fi
-
-# Add Audio package
-case $PROJECT in
-  Generic|Nvidia_Legacy)
-    PKG_QT_AUDIO="pulseaudio"
-  ;;
-  RPi|RPi2)
-    PKG_QT_AUDIO="alsa"
-  ;;
-esac
 
 # Combine packages
 PKG_DEPENDS_TARGET="$PKG_BASE_DEPENDS_TARGET $PKG_QT_AUDIO $PKG_QT_QPA"
