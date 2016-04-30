@@ -17,12 +17,12 @@
 ################################################################################
 
 PKG_NAME="breakpad"
-PKG_VERSION="konvergo"
+PKG_VERSION="master"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://nightlies.plex.tv"
-PKG_URL="https://github.com/plexinc/breakpad/archive/master.zip"
+PKG_URL="$PKG_SITE/directdl/plex-oe-sources/$PKG_NAME-$PKG_VERSION.tar.gz"
 PKG_DEPENDS_TARGET="toolchain"
 PKG_PRIORITY="optional"
 PKG_SECTION="system"
@@ -30,24 +30,7 @@ PKG_SHORTDESC="breakpad allow to get dumps when a program crashes"
 PKG_LONGDESC="breakpad allow to get dumps when a program crashes"
 
 PKG_IS_ADDON="no"
-PKG_AUTORECONF="yes"
-
-#PKG_CONFIGURE_OPTS_TARGET="--prefix=${SYSROOT_PREFIX}"
-
-unpack() {
-  if [ -d $BUILD/${PKG_NAME}-${PKG_VERSION} ]; then
-    cd $BUILD/${PKG_NAME}-${PKG_VERSION}
-    git pull ; git reset --hard
-  else
-    rm -rf $BUILD/${PKG_NAME}-${PKG_VERSION}
-    git clone -b $PKG_VERSION git@github.com:plexinc/breakpad.git  $BUILD/${PKG_NAME}-${PKG_VERSION}
-
-    cd $BUILD/${PKG_NAME}-${PKG_VERSION}
-    git submodule update --init
-  fi
-
-  cd ${ROOT}
-}
+PKG_AUTORECONF="no"
 
 post_makeinstall_target() {
   mkdir -p ${SYSROOT_PREFIX}/usr/include/breakpad/google_breakpad/common/
