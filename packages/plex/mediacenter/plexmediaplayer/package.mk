@@ -18,21 +18,7 @@
 ################################################################################
 
 PKG_NAME="${MEDIACENTER,,}"
-
-# Edit CI repo name to exclude origin
-if [ ! -z "$PMP_BRANCH" ]; then
-  export GIT_REPO="`echo ${PMP_BRANCH/origin\//}`"
-fi
-
-case $PROJECT in
-   Generic|Nvidia_Legacy)
-    PKG_VERSION="${GIT_REPO:-dist-ninja}"
-   ;;
-   RPi|RPi2)
-    PKG_VERSION="${GIT_REPO:-dist-ninja}"
-   ;;
-esac
-
+PKG_VERSION=$PLEX_PMP_BRANCH
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
@@ -106,10 +92,13 @@ configure_target() {
   fi
 
  # Cod Options
- if [ ! -z "${CODECS}" ]; then
+ if [ "${CODECS}" = "yes" ]; then
   COD_OPTIONS="-DENABLE_CODECS=on -DOE_ARCH=${PLEX_CODEC_ARCH} -DDEPENDCY_FOLDER=plexmediaplayer-openelec-codecs"
+ else
+  COD_OPTIONS="-DENABLE_CODECS=off -DDISABLE_BUNDLED_DEPS=on"
  fi
 
+echo "COD Options : ${COD_OPTIONS}"
 CMAKE_OPTIONS="-DCMAKE_INSTALL_PREFIX=/usr \
                -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
                -DCMAKE_LIBRARY_PATH=$SYSROOT_PREFIX/usr/lib \
