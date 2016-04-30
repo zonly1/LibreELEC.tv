@@ -1,0 +1,39 @@
+diff --git a/src/player/PlayerQuickItem.cpp b/src/player/PlayerQuickItem.cpp
+index 59fbb69..0a31d26 100644
+--- a/src/player/PlayerQuickItem.cpp
++++ b/src/player/PlayerQuickItem.cpp
+@@ -13,6 +13,10 @@
+ #include "QsLog.h"
+ #include "utils/Utils.h"
+ 
++#if defined(Q_OS_LINUX)
++#include <dlfcn.h>
++#endif
++
+ #if defined(Q_OS_WIN32)
+ 
+ #include <windows.h>
+@@ -106,7 +110,6 @@ static void* get_proc_address(void* ctx, const char* name)
+   if (!glctx)
+     return nullptr;
+ 
+-  void *res = (void *)glctx->getProcAddress(QByteArray(name));
+   if (strcmp(name, "glMPGetNativeDisplay") == 0)
+   {
+     return (void *)&MPGetNativeDisplay;
+@@ -122,7 +125,15 @@ static void* get_proc_address(void* ctx, const char* name)
+     if (handle)
+       res = (void *)GetProcAddress(handle, name);
+   }
++#elif defined(Q_OS_LINUX)
++  void *handle = glctx->openGLModuleHandle();
++  void *res = nullptr;
++  if (handle)
++    res = dlsym(handle, name);
++#else
++  void *res = (void *)glctx->getProcAddress(QByteArray(name));
+ #endif
++
+   return res;
+ }
+ 
