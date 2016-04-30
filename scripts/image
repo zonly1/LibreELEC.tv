@@ -68,6 +68,14 @@ if [ -n "$CUSTOM_IMAGE_NAME" ]; then
    IMAGE_NAME="$CUSTOM_IMAGE_NAME" 
 fi
 
+if [ -n "$CUSTOM_VERSION" ]; then
+  LIBREELEC_VERSION="$CUSTOM_VERSION"
+fi
+
+if [ -n "$CUSTOM_GIT_HASH" ]; then
+  GIT_HASH="$CUSTOM_GIT_HASH"
+fi
+
 if [ -n "$IMAGE_SUFFIX" ]; then
   IMAGE_NAME="$IMAGE_NAME-$IMAGE_SUFFIX"
 fi
