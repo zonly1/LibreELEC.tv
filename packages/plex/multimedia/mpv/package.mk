@@ -57,7 +57,7 @@ unpack() {
   mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}
   git clone --depth 1 -b $PKG_VERSION git@github.com:wm4/mpv.git $BUILD/${PKG_NAME}-${PKG_VERSION}/.
   case $PROJECT in
-    RPi|RPi2)
+    RPi|RPi2|Odroid_C2)
       # Before changing the subtitle renderer to EGL/GLES
       # These are needed on RPI only. Without, RPI output support
       # will not be compiled.
