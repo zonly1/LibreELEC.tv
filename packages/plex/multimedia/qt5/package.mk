@@ -77,7 +77,7 @@ case $PROJECT in
   RPi|RPi2)
 
   # OpenGLES configuration
-  QT_QPA_OPTS="-qpa eglfs -opengl es2 -no-kms -no-directfb -no-xcb"
+  QT_QPA_OPTS="-qpa eglfs -opengl es2 -no-kms -no-directfb -no-xcb -skip qtx11extras"
   ;;
 esac
 
