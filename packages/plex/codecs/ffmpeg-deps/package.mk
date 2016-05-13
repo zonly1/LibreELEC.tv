@@ -47,7 +47,7 @@ case $PROJECT in
         PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET bcm2835-driver"
         ;;
 
-        Generic|Nvidia_Legacy)
+        Generic)
         BUILD_TAG="linux-embedded-x86_64"
         ;;
 esac
@@ -60,6 +60,11 @@ unpack() {
 ### END PLEX
 
 make_target() {
+  case $PROJECT in
+         GENERIC)
+         export LDFLAGS="$LDFLAGS -fPIC"
+         ;;
+  esac
   export TARGET_CPU TARGET_ARCH TARGET_PREFIX SYSROOT_PREFIX HOST_CC HOST_CFLAGS HOST_LDFLAGS ARCH ROOT TOOLCHAIN
   ./bootstrap.py -k ${DEPS_PROJECT} -j 6 -p $BUILD_TAG -e ${PMP_GROUP} -v build
   : # nothing to do here
@@ -77,7 +82,7 @@ makeinstall_target() {
   fi
 
   cp -R $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/output/Packages/* $ROOT/output/Packages/.
-  cp -R $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/output/konvergo-codecs-depends-linux-openelec-*-release*/lib/*.so* $INSTALL/usr/lib/.
+  cp -R $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/output/konvergo-codecs-depends-linux-embedded-*-release*/lib/*.so* $INSTALL/usr/lib/.
 }
 
 addon() {
