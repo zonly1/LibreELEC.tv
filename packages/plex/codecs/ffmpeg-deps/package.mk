@@ -43,12 +43,12 @@ fi
 
 case $PROJECT in
         RPi|RPi2)
-        BUILD_TAG="linux-embedded-armv7"
+        BUILD_TAG="linux-openelec-armv7"
         PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET bcm2835-driver"
         ;;
 
         Generic)
-        BUILD_TAG="linux-embedded-x86_64"
+        BUILD_TAG="linux-openelec-x86_64"
         ;;
 esac
 
@@ -61,8 +61,8 @@ unpack() {
 
 make_target() {
   case $PROJECT in
-         GENERIC)
-         export LDFLAGS="$LDFLAGS -fPIC"
+         Generic)
+         strip_lto
          ;;
   esac
   export TARGET_CPU TARGET_ARCH TARGET_PREFIX SYSROOT_PREFIX HOST_CC HOST_CFLAGS HOST_LDFLAGS ARCH ROOT TOOLCHAIN
@@ -82,7 +82,7 @@ makeinstall_target() {
   fi
 
   cp -R $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/output/Packages/* $ROOT/output/Packages/.
-  cp -R $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/output/konvergo-codecs-depends-linux-embedded-*-release*/lib/*.so* $INSTALL/usr/lib/.
+  cp -R $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/output/konvergo-codecs-depends-linux-openelec-*-release*/lib/*.so* $INSTALL/usr/lib/.
 }
 
 addon() {
