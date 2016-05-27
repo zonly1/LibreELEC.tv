@@ -20,6 +20,9 @@
 # Install glibc locales to the build (yes / no)
   GLIBC_LOCALES="yes"
 
+# Use Custom Fonts for the install
+  CUSTOM_FONTS="${MEDIACENTER}-fonts-ttf"
+
 # Skins to install (Confluence)
 # Space separated list is supported,
 # e.g. SKINS="Confluence"
