@@ -33,7 +33,7 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
 # Add option to use custom fonts
-if [ -n "$CUSTOM_FONTSi" ]; then
+if [ -n "$CUSTOM_FONTS" ]; then
   FONT_PATH="/usr/share/fonts"
 else
   FONT_PATH="/usr/share/fonts/liberation"
