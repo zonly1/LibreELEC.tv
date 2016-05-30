@@ -32,9 +32,16 @@ PKG_LONGDESC="Fontconfig is a library for font customization and configuration."
 PKG_IS_ADDON="no"
 PKG_AUTORECONF="yes"
 
+# Add option to use custom fonts
+if [ -n "$CUSTOM_FONTS ]; then
+  FONT_PATH="/usr/share/fonts"
+else
+  FONT_PATH="/usr/share/fonts/liberation"
+fi
+
 PKG_CONFIGURE_OPTS_TARGET="--with-arch=$TARGET_ARCH \
                            --with-cache-dir=/storage/.cache/fontconfig \
-                           --with-default-fonts=/usr/share/fonts/liberation \
+                           --with-default-fonts=$FONT_PATH \
                            --without-add-fonts \
                            --disable-dependency-tracking \
                            --disable-docs"
