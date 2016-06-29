@@ -78,7 +78,7 @@ PKG_CONFIGURE_OPTS_TARGET="CC_FOR_BUILD=$HOST_CC \
                            --disable-gles1 \
                            $MESA_GLES \
                            --enable-dri \
-                           --enable-dri3 \
+                           --disable-dri3 \
                            --enable-glx \
                            --disable-osmesa \
                            --disable-gallium-osmesa \
