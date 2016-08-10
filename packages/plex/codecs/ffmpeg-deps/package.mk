@@ -53,6 +53,9 @@ case $PROJECT in
 esac
 
 unpack() {
+        if [ -n "$DEPS_BRANCH" ]; then
+          export PKG_VERSION="$DEPS_BRANCH"
+        fi
 
         git clone --depth 1 -b $PKG_VERSION git@github.com:${DEPS_REPO}.git $BUILD/${PKG_NAME}-${PKG_VERSION}
 
