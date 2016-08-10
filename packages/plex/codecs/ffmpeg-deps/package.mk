@@ -17,7 +17,14 @@
 ################################################################################
 
 PKG_NAME="ffmpeg-deps"
-PKG_VERSION="konvergo-codecs"
+
+# Override PKG_VERSION if set on CI
+if [ -n "$DEPS_BRANCH" ]; then
+  export PKG_VERSION="$DEPS_BRANCH"
+else
+  export PKG_VERSION="konvergo-codecs"
+fi
+
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="LGPLv2.1+"
@@ -53,9 +60,6 @@ case $PROJECT in
 esac
 
 unpack() {
-        if [ -n "$DEPS_BRANCH" ]; then
-          export PKG_VERSION="$DEPS_BRANCH"
-        fi
 
         git clone --depth 1 -b $PKG_VERSION git@github.com:${DEPS_REPO}.git $BUILD/${PKG_NAME}-${PKG_VERSION}
 
