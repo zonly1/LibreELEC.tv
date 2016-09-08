@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="mpv"
-PKG_VERSION="master"
+PKG_VERSION="rpi-wip"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"

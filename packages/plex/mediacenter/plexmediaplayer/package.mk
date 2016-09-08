@@ -16,7 +16,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with OpenELEC.  If not, see <http://www.gnu.org/licenses/>.
 ################################################################################
-
+PLEX_PMP_BRANCH=rpi-wip
 PKG_NAME="${MEDIACENTER,,}"
 PKG_VERSION=$PLEX_PMP_BRANCH
 PKG_REV="1"
