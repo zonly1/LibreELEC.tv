@@ -67,6 +67,7 @@ configure_host() {
 
 makeinstall_host() {
   make INSTALL_PREFIX=$TOOLCHAIN install_sw
+  rm -rf $PKG_BUILD/.$HOST_NAME
 }
 
 pre_configure_target() {
@@ -105,9 +106,9 @@ post_makeinstall_target() {
 
   debug_strip $INSTALL/usr/bin/openssl
 
-  # cert from https://curl.haxx.se/docs/caextract.html
+  # create new cert: ./mkcerts.sh
   mkdir -p $INSTALL/etc/ssl
-    cp $PKG_DIR/cert/cacert.pem $INSTALL/etc/ssl/cert.pem
+    cp $PKG_DIR/cert/ca-bundle.crt $INSTALL/etc/ssl/cert.pem
 
   # backwards comatibility
   mkdir -p $INSTALL/etc/pki/tls
