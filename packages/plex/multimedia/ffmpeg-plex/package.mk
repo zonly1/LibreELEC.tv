@@ -166,7 +166,6 @@ configure_target() {
               --disable-ffplay \
               --disable-ffserver \
               --disable-devices \
-              --disable-x11grab \
               --enable-gnutls  \
               $FFMPEG_VAAPI \
               $FFMPEG_VDPAU \
