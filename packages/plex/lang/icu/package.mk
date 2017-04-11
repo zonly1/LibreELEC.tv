@@ -33,7 +33,7 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
 PKG_CONFIGURE_OPTS_HOST="--disable-samples --disable-test --prefix=$PWD/icu_host"
-PKG_CONFIGURE_OPTS_TARGET="--disable-samples  --disable-test --with-cross-build=$ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/icu_host"
+PKG_CONFIGURE_OPTS_TARGET="--disable-samples  --disable-test --with-cross-build=$BUILD/${PKG_NAME}-${PKG_VERSION}/icu_host"
 
 unpack() {
   tar -xzf $SOURCES/${PKG_NAME}/icu4c-$PKG_VERSION-src.tgz -C $BUILD/
@@ -43,7 +43,7 @@ unpack() {
 }
 
 configure_host() {
-  mkdir $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/icu_host
-  cd $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/icu_host
-  $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/runConfigureICU Linux --prefix=$ROOT/$TOOLCHAIN --enable-extras=no --enable-tests=no --enable-samples=no
+  mkdir $BUILD/${PKG_NAME}-${PKG_VERSION}/icu_host
+  cd $BUILD/${PKG_NAME}-${PKG_VERSION}/icu_host
+  $BUILD/${PKG_NAME}-${PKG_VERSION}/runConfigureICU Linux --prefix=$TOOLCHAIN --enable-extras=no --enable-tests=no --enable-samples=no
 }

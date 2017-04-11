@@ -42,7 +42,7 @@ case $PROJECT in
 esac
 
 
-MPV_EXTRA_CFLAGS="-I$PWD/$BUILD/${PKG_NAME}-${PKG_VERSION}/extraheaders"
+MPV_EXTRA_CFLAGS="-I$BUILD/${PKG_NAME}-${PKG_VERSION}/extraheaders"
 
 # generate debug symbols for this package
 # if we want to
@@ -78,18 +78,18 @@ unpack() {
 }
 
 configure_target() {
-  cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
+  cd ${BUILD}/${PKG_NAME}-${PKG_VERSION}
   ./bootstrap.py
   CFLAGS="$MPV_EXTRA_CFLAGS" ./waf configure ${PKG_CONFIGURE_OPTS_TARGET}
 }
 
 make_target() {
-  cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
+  cd ${BUILD}/${PKG_NAME}-${PKG_VERSION}
   ./waf build
 }
 
 makeinstall_target() {
-  cd ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}
+  cd ${BUILD}/${PKG_NAME}-${PKG_VERSION}
   ./waf install
 
   mkdir -p $INSTALL/usr/lib

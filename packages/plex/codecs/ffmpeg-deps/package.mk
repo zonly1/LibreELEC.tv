@@ -81,8 +81,8 @@ makeinstall_target() {
     mkdir -p $INSTALL/usr/lib
   fi
 
-  cp -R $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/output/Packages/* $ROOT/output/Packages/.
-  cp -R $ROOT/$BUILD/${PKG_NAME}-${PKG_VERSION}/output/konvergo-codecs-depends-linux-openelec-*-release*/lib/*.so* $INSTALL/usr/lib/.
+  cp -R $BUILD/${PKG_NAME}-${PKG_VERSION}/output/Packages/* $ROOT/output/Packages/.
+  cp -R $BUILD/${PKG_NAME}-${PKG_VERSION}/output/konvergo-codecs-depends-linux-openelec-*-release*/lib/*.so* $INSTALL/usr/lib/.
 }
 
 addon() {
