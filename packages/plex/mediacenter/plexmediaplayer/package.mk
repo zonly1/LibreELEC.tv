@@ -58,7 +58,7 @@ fi
 
 # define target type if needed
 case $PROJECT in
-  RPi|RPi2)
+  RPi)
     PMP_BUILD_TARGET="RPI"
   ;;
 

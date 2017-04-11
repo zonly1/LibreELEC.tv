@@ -42,7 +42,7 @@ if [ "$CI_BUILD" = true ]; then
 fi
 
 case $PROJECT in
-        RPi|RPi2)
+        RPi)
         BUILD_TAG="linux-openelec-armv7"
         PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET bcm2835-driver"
         ;;

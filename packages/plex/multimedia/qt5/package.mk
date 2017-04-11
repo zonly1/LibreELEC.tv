@@ -93,7 +93,7 @@ configure_target() {
     cp -R $PKG_DIR/patches/${PROJECT}/* ${ROOT}/${BUILD}/${PKG_NAME}-${PKG_VERSION}/qtwebengine/src/3rdparty/chromium/third_party/WebKit/Source/platform/image-decoders/
 
     case $PROJECT in
-      RPi|RPi2)
+      RPi)
         cp $SYSROOT_PREFIX/usr/include/interface/vcos/pthreads/vcos_platform_types.h $SYSROOT_PREFIX/usr/include/interface/vcos/
         cp $SYSROOT_PREFIX/usr/include/interface/vcos/pthreads/vcos_platform.h $SYSROOT_PREFIX/usr/include/interface/vcos/
         cp $SYSROOT_PREFIX/usr/include/interface/vmcs_host/linux/vchost_config.h $SYSROOT_PREFIX/usr/include/interface/vmcs_host/
@@ -128,7 +128,7 @@ makeinstall_target() {
   case $PROJECT in
     Generic|Nvidia_Legacy)
     ;;
-    RPi|RPi2)
+    RPi)
       rm -f  ${INSTALL}/usr/local/qt5/plugins/generic/libqevdevtabletplugin.so
       rm -f  ${INSTALL}/usr/local/qt5/plugins/generic/llibqevdevtouchplugin.so
 

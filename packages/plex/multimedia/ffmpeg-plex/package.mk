@@ -109,7 +109,7 @@ case "$TARGET_FPU" in
 esac
 
 case $PROJECT in
-  RPi|RPi2)
+  RPi)
     FFMPEG_MMAL="--enable-mmal"
     PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET bcm2835-driver"
   ;;
