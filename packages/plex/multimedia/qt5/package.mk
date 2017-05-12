@@ -17,12 +17,12 @@
 #  ################################################################################
 
 PKG_NAME="qt5"
-PKG_VERSION="5.9.0-beta3"
+PKG_VERSION="5.7.0"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="OSS"
 PKG_SITE="https://nightlies.plex.tv"
-PKG_URL="http://download.qt.io/development_releases/qt/5.9/5.9.0-beta3/single/qt-everywhere-opensource-src-$PKG_VERSION.tar.xz"
+PKG_URL="http://download.qt.io/official_releases/qt/5.7/5.7.0/single//qt-everywhere-opensource-src-$PKG_VERSION.tar.xz"
 PKG_SOURCE_DIR="qt-everywhere-opensource-src-${PKG_VERSION}"
 PKG_PRIORITY="optional"
 PKG_SECTION="lib"
