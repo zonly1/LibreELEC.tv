@@ -4,7 +4,7 @@
 # determines DISTRO, if not forced by user
 # default is LibreELEC
 if [ -z "$DISTRO" ]; then
-  DISTRO="LibreELEC"
+  DISTRO="PlexMediaPlayer"
 else
   DISTRO="$DISTRO"
 fi
