@@ -148,7 +148,6 @@ configure_target() {
               --host-cc="$HOST_CC" \
               --host-cflags="$HOST_CFLAGS" \
               --host-ldflags="$HOST_LDFLAGS" \
-              --host-libs="-lm" \
               --extra-cflags="$CFLAGS" \
               --extra-ldflags="$LDFLAGS -fPIC" \
               --extra-libs="" \
@@ -166,7 +165,6 @@ configure_target() {
               --disable-ffplay \
               --disable-ffserver \
               --disable-devices \
-              --disable-x11grab \
               --enable-gnutls  \
               $FFMPEG_VAAPI \
               $FFMPEG_VDPAU \
