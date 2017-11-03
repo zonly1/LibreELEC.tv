@@ -8,14 +8,14 @@ debug_strip() {
 
         # Dump symbols if we asked for
         # create the symbols dump directory
-        PLEX_DUMP_DIR=$ROOT/$PKG_BUILD/.symbols
+        PLEX_DUMP_DIR=$PKG_BUILD/.symbols
         rm -rf $PLEX_DUMP_DIR || true
         mkdir $PLEX_DUMP_DIR 
 	
         for i in  $PLEX_DUMP_LIBRARIES $PLEX_DUMP_BINARIES; do
           PLEX_DUMP_FILE_NAME=`basename $i`
           echo " Dumping symbols for $PLEX_DUMP_FILE_NAME..."
-          $ROOT/$TOOLCHAIN/bin/dump_syms $i | xz > $PLEX_DUMP_DIR/$PLEX_DUMP_FILE_NAME.symbols.xz
+          $TOOLCHAIN/bin/dump_syms $i | xz > $PLEX_DUMP_DIR/$PLEX_DUMP_FILE_NAME.symbols.xz
         done
       ;;
     esac
@@ -25,7 +25,7 @@ debug_strip() {
 deploy_symbols() {
   if [ "$PLEX_DUMP_SYMBOLS" = "yes" ]; then
     echo "Deploying symbols for $PKG_NAME..."
-    PLEX_DUMP_DIR=$ROOT/$PKG_BUILD/.symbols
+    PLEX_DUMP_DIR=$PKG_BUILD/.symbols
     mkdir -p  $ROOT/target/$1
     cp  $PLEX_DUMP_DIR/* $ROOT/target/$1
   fi
