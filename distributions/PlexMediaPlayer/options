@@ -212,10 +212,6 @@ DISTRO_DEPS_PKG="python-pip"
 
   QT_EXTRA_FLAGS=--force-debug-info
 
-# We want ssh enabled by default 
-EXTLINUX_PARAMETERS="ssh"
-export EXTRA_CMDLINE=$EXTLINUX_PARAMETERS
-
 # Define our build variables
 # PMP repo
 export PLEX_PMP_REPO=${PMP_REPO:-plex-media-player}
