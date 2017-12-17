@@ -19,18 +19,17 @@
 ################################################################################
 
 PKG_NAME="nss"
-PKG_VERSION="3.22.3"
-PKG_REV="2"
+PKG_VERSION="3.34.1"
+PKG_SHA256="054c3305af37ad6bee9d335782b3230d73a3a2c63b36b66125ae5af372243e0f"
 PKG_ARCH="any"
 PKG_LICENSE="Mozilla Public License"
 PKG_SITE="http://ftp.mozilla.org/"
-PKG_URL="http://ftp.mozilla.org/pub/security/nss/releases/NSS_3_22_3_RTM/src/nss-3.22.3-with-nspr-4.12.tar.gz"
+PKG_URL="http://ftp.mozilla.org/pub/security/nss/releases/NSS_3_34_1_RTM/src/nss-3.34.1-with-nspr-4.17.tar.gz"
 PKG_DEPENDS_TARGET="toolchain nss:host nspr zlib"
 PKG_SECTION="security"
 PKG_SHORTDESC="The Network Security Services (NSS) package is a set of libraries designed to support cross-platform development of security-enabled client and server applications"
 PKG_LONGDESC="The Network Security Services (NSS) package is a set of libraries designed to support cross-platform development of security-enabled client and server applications"
-PKG_IS_ADDON="no"
-PKG_AUTORECONF="no"
+PKG_TOOLCHAIN="manual"
 
 MAKEFLAGS=-j1
 
@@ -53,11 +52,14 @@ post_makeinstall_host() {
 make_target() {
   cd $PKG_BUILD/nss
 
-  [ "$TARGET_ARCH" = "x86_64" ] && TARGET_USE_64="USE_64=1"
+  [ "$TARGET_ARCH" = "x86_64" -o  "$TARGET_ARCH" = "aarch64" ] && TARGET_USE_64="USE_64=1"
 
   make BUILD_OPT=1 $TARGET_USE_64 \
+     NSS_USE_SYSTEM_SQLITE=1 \
+     NSS_DISABLE_GTESTS=1 \
      NSPR_INCLUDE_DIR=$SYSROOT_PREFIX/usr/include/nspr \
      USE_SYSTEM_ZLIB=1 ZLIB_LIBS=-lz \
+     SKIP_SHLIBSIGN=1 \
      OS_TEST=$TARGET_ARCH \
      NSS_TESTS="dummy" \
      NSINSTALL=$TOOLCHAIN/bin/nsinstall \
@@ -74,4 +76,7 @@ makeinstall_target() {
   mkdir -p $SYSROOT_PREFIX/usr/include/nss
   cp -RL dist/{public,private}/nss/* $SYSROOT_PREFIX/usr/include/nss
   cp -L dist/Linux*/lib/pkgconfig/nss.pc $SYSROOT_PREFIX/usr/lib/pkgconfig
+
+  mkdir -p .install_pkg/usr/lib
+    cp -PL dist/Linux*/lib/*.so .install_pkg/usr/lib
 }
