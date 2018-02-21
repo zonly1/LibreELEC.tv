@@ -1,0 +1,47 @@
+--- a/qtwebengine/src/3rdparty/chromium/net/dns/host_resolver_impl.cc
++++ b/qtwebengine/src/3rdparty/chromium/net/dns/host_resolver_impl.cc
+@@ -2065,6 +2065,32 @@
+   }
+ }
+
++static bool ServePlexDirect(const HostCache::Key& key,
++                            const HostResolver::RequestInfo& info,
++                            AddressList* addresses)
++{
++  if (!EndsWith(info.hostname(), ".plex.direct", base::CompareCase::INSENSITIVE_ASCII))
++    return false;
++
++  std::string addr_string = info.hostname().substr(0, info.hostname().find('.'));
++  base::ReplaceChars(addr_string, "-", ".", &addr_string);
++
++  IPAddress ip_address;
++  if (!ip_address.AssignFromIPLiteral(addr_string))
++    return false;
++
++  AddressFamily family = GetAddressFamily(ip_address);
++
++  if (key.address_family != ADDRESS_FAMILY_UNSPECIFIED &&
++      key.address_family != family) {
++    // Don't return IPv6 addresses for IPv4 queries, and vice versa.
++    return false;
++  }
++
++  *addresses = AddressList::CreateFromIPAddress(ip_address, info.port());
++  return true;
++}
++
+ int HostResolverImpl::ResolveHelper(const RequestInfo& info,
+                                     bool allow_stale,
+                                     HostCache::EntryStaleness* stale_info,
+@@ -2115,6 +2141,11 @@
+     return OK;
+   }
+
++  if (ServePlexDirect(*key, info, addresses)) {
++    MakeNotStale(stale_info);
++    return OK;
++  }
++
+   if (ServeLocalhost(*key, info, addresses)) {
+     MakeNotStale(stale_info);
+     return OK;
